@@ -35,3 +35,14 @@ export const ThemedButton = styled.button<{
     `}
 	`}
 `;
+export const LinkButton = styled.span`
+  color: ${PRIMARY_6_BLUE};
+  text-align: center;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px;
+  border: none;
+  backgorund: transparent;
+  cursor: pointer;
+`

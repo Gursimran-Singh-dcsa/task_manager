@@ -6,8 +6,11 @@ import { ThemedButton } from '../../styles/common';
 import { ErrorMessageWrapper } from '../../styles/createTasks';
 import { DownOutlined } from '@ant-design/icons';
 import { isValidData, validator } from '../../helper/createTask';
+import { useNavigate } from 'react-router';
 
 const CreateTasks = () => {
+	const navigate = useNavigate();
+
 	const [taskData, setTaskData] = useState({
 		data: {
 			name: '',
@@ -25,8 +28,9 @@ const CreateTasks = () => {
 	});
 	return (
 		<Modal
-			open
+			open={true}
 			closable
+			onCancel={() => navigate(-1)}
 			title={
 				<div
 					style={{
@@ -62,13 +66,15 @@ const CreateTasks = () => {
 							alignSelf: 'stretch',
 						}}
 					>
-						<ThemedButton $type="neutral">Cancel</ThemedButton>
+						<ThemedButton $type="neutral" onClick={() => navigate(-1)}>
+							Cancel
+						</ThemedButton>
 						<ThemedButton
 							$disabled={!isValidData(taskData)}
 							$type="primary"
 							onClick={() => {
 								if (!isValidData(taskData)) return;
-                else console.log(taskData)
+								else console.log(taskData);
 							}}
 						>
 							Create

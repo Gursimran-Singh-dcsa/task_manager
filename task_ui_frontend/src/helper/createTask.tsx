@@ -49,7 +49,7 @@ export const validator = (
 	} else {
 		setTaskData((prev: any) => ({
 			...prev,
-			data: { ...prev.data, [type]: value },
+			data: { ...prev.data, [type]: valueToSet },
 			error: { ...prev.error, [type]: '' },
 		}));
 	}

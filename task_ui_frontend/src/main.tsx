@@ -4,6 +4,8 @@ import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Homepage from './pages';
 import CreateTasks from './pages/createTasks';
+import LoginScreen from './pages/Login';
+import TaskList from './pages/TaskList';
 
 const router = createBrowserRouter([
 	{
@@ -11,10 +13,20 @@ const router = createBrowserRouter([
 		element: <Homepage />,
 		children: [
 			{
-				path: 'create-tasks',
-				element: <CreateTasks />,
+				path: 'task-list',
+				element: <TaskList />,
+				children: [
+					{
+						path: 'create-tasks',
+						element:  <CreateTasks />,
+					},
+				],
 			},
 		],
+	},
+	{
+		path: '/login',
+		element: <LoginScreen />,
 	},
 ]);
 ReactDOM.createRoot(document.getElementById('root')!).render(
