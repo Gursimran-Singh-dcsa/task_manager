@@ -1,0 +1,19 @@
+export const DB_NAME = "task_manager";
+export const PORT = 8080;
+export const COLLECTION_NAMES = {
+  TASKS_COLLECTION: 'tasks',
+  USERS_COLLECTION: 'users'
+};
+
+export const STATUS = {
+  UNPROCESSABLE_ENTITY: 422,
+  NOT_FOUND: 404,
+  BAD_REQUEST: 400,
+  INTERNAL_SERVER_ERROR: 500,
+  CREATED: 201,
+  HTTP_OK: 200,
+  UNAUTHENTICATED: 401,
+  UNAUTHORIZED: 403,
+  DELETED: 204,
+};
+
