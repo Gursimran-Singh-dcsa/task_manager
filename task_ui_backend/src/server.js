@@ -1,14 +1,23 @@
 import express from 'express';
 import { connectMongo } from '../connection.js';
 import { PORT } from './constants.js';
-import TaskRouter from './routes/tasks.js';
+import v1Router from './routes/v1/index.js';
 import HttpErrorService from './services/HttpErrorService.js';
-
+import cors from 'cors';
+import dotenv from 'dotenv';
 const app = express();
 
-
+dotenv.config();
 app.use(express.json());
-app.use('/task', TaskRouter);
+console.log('process.env.ALLOWED_HOSTS.split(",")', process.env.ALLOWED_HOSTS.split(","));
+app.use(
+  cors({
+    origin: process.env.ALLOWED_HOSTS.split(",").map((host) => host.trim()),
+    credentials: true,
+  })
+);
+
+app.use('/api/v1', v1Router);
 app.use(() => {
   throw new HttpErrorService(404, "Something went wrong");
 });
