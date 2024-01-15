@@ -4,6 +4,7 @@ import { Outlet, useNavigate } from 'react-router';
 import Analytics from '../../components/analytics';
 import FilterSection from '../../components/FilterSection';
 import SubHeader from '../../components/PageSubHeader';
+import TaskListTable from '../../components/TaskListTable';
 import { getGreeting } from '../../helper/taskList';
 import { BLACK_0_25, WHITE } from '../../styles/constants';
 
@@ -19,9 +20,7 @@ const TaskList = () => {
 				createNewText="Create New Task"
 				text="Task List"
 			/>
-			{showFilters ? (
-				<FilterSection filters={filters} setFilters={setFilters} />
-			) : null}
+
 			<Row
 				style={{
 					padding: '15px 15px',
@@ -37,6 +36,10 @@ const TaskList = () => {
 				</div>
 			</Row>
 			<Analytics />
+			{showFilters ? (
+				<FilterSection filters={filters} setFilters={setFilters} />
+			) : null}
+			<TaskListTable filters={filters} />
 			<Outlet />
 		</>
 	);

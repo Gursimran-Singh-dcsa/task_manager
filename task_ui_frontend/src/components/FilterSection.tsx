@@ -2,7 +2,7 @@ import { Row, Col, Input, Select, DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import { priorityMenuItems } from '../constant';
 import { LinkButton } from '../styles/common';
-
+import _ from 'lodash';
 const { Search } = Input;
 
 const FilterSection = ({
@@ -17,16 +17,15 @@ const FilterSection = ({
 			<Col xs={12} lg={6}>
 				<Search
 					style={{ maxWidth: '240px' }}
-					value={filters.keywords}
-					onChange={(e) => {
+					onChange={_.debounce((e) => {
 						setFilters((prev: any) => {
 							return {
 								...prev,
-								keywords: e.target.value,
+								keyword: e.target.value,
 							};
 						});
-					}}
-					placeholder="Search by Comma Separated Keywords"
+					}, 400)}
+					placeholder="Search by name"
 				/>
 			</Col>
 			<Col xs={12} lg={6}>
@@ -38,7 +37,7 @@ const FilterSection = ({
 					options={priorityMenuItems}
 					onChange={(value) => {
 						console.log('value is', value);
-						setFilters((prev: any) => ({ ...prev, priority: value }));
+						setFilters((prev: any) => ({ ...prev, priority: value?.toLowerCase() }));
 					}}
 				/>
 			</Col>
@@ -47,12 +46,12 @@ const FilterSection = ({
 					allowClear
 					value={filters.createdOn}
 					style={{ width: '100%', maxWidth: '240px' }}
-					placeholder="Created On"
+					placeholder="Due Date"
 					disabledDate={(current) => {
-						return current > dayjs().endOf('day');
+						return current < dayjs().endOf('day');
 					}}
 					onChange={(date) =>
-						setFilters((prev: any) => ({ ...prev, createdOn: date }))
+						setFilters((prev: any) => ({ ...prev, dueDate: date?.format('YYYY-MM-DD') }))
 					}
 				/>
 			</Col>
