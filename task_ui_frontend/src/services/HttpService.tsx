@@ -2,7 +2,7 @@ import axios from 'axios';
 import { message } from 'antd';
 import { API_BASE_URL } from '../constant';
 
-type HttpMethod = 'get' | 'post' | 'delete';
+type HttpMethod = 'get' | 'post' | 'delete' | 'put';
 
 interface RequestOptions {
 	method: HttpMethod;
@@ -39,9 +39,18 @@ export function postAxios<T>(
 
 export function deleteAxios<T>(
 	url: string,
+	body: any,
 	headers?: Record<string, string>
 ): Promise<ApiResponse<T>> {
-	return axiosRequest<T>(url, { method: 'delete', headers });
+	return axiosRequest<T>(url, { method: 'delete', body, headers });
+}
+
+export function putAxios<T>(
+	url: string,
+	body: any,
+	headers?: Record<string, string>
+): Promise<ApiResponse<T>> {
+	return axiosRequest<T>(url, { method: 'put', body, headers });
 }
 async function axiosRequest<T>(
 	url: string,

@@ -8,8 +8,8 @@ export const priorityMenuItems: any = [
 	},
 	{
 		label: <span style={{ color: 'Orange' }}>Medium</span>,
-		key: 'Medium',
-		value: 'Medium',
+		key: 'medium',
+		value: 'medium',
 	},
 	{
 		label: <span style={{ color: 'Green' }}>Low</span>,

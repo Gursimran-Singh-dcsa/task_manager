@@ -1,24 +1,28 @@
 import { Modal, Row, Input, DatePicker, Col, Dropdown, Button } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import { priorityMenuItems } from '../../constant';
+import { BACKEND_API_DATE_FORMAT, priorityMenuItems } from '../../constant';
 import { ThemedButton } from '../../styles/common';
 import { ErrorMessageWrapper } from '../../styles/createTasks';
 import { DownOutlined } from '@ant-design/icons';
-import { isValidData, validator } from '../../helper/createTask';
+import { createTask, isValidData, validator } from '../../helper/createTask';
 import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 
 const CreateTasks = () => {
 	const navigate = useNavigate();
-
-	const [taskData, setTaskData] = useState({
-		data: {
-			name: '',
-			description: '',
-			dueDate: null,
-			priority: '',
-			isCompleted: false,
-		},
+	const location = useLocation();
+	const { state = null } = location;
+	const [taskData, setTaskData] = useState<any>({
+		data: state?.isEdit
+			? { ...state?.data, dueDate: dayjs(state?.data?.dueDate) }
+			: {
+					name: '',
+					description: '',
+					dueDate: null,
+					priority: '',
+					isComplete: false,
+			  },
 		error: {
 			name: '',
 			description: '',
@@ -42,7 +46,7 @@ const CreateTasks = () => {
 						paddingBottom: '10px',
 					}}
 				>
-					Create Task
+					{state?.isEdit ? 'Edit Task' : 'Create Task'}
 				</div>
 			}
 			footer={() => (
@@ -72,12 +76,29 @@ const CreateTasks = () => {
 						<ThemedButton
 							$disabled={!isValidData(taskData)}
 							$type="primary"
-							onClick={() => {
+							onClick={async () => {
 								if (!isValidData(taskData)) return;
-								else console.log(taskData);
+								else
+									createTask(
+										{
+											...taskData.data,
+											dueDate: taskData?.data?.dueDate?.format(
+												BACKEND_API_DATE_FORMAT
+											),
+											priority: taskData?.data?.priority?.toLowerCase(),
+										},
+										state?.isEdit
+									).finally(async () => {
+										// await mutate('/task/getTask')
+										navigate('/task-list', {
+											state: {
+												mutate: true,
+											},
+										});
+									});
 							}}
 						>
-							Create
+							{state?.isEdit ? 'Edit' : 'Create'}
 						</ThemedButton>
 					</div>
 				</div>
@@ -86,6 +107,7 @@ const CreateTasks = () => {
 			<div style={{ display: 'flex', flexDirection: 'column', rowGap: '15px' }}>
 				<Row>
 					<Input
+						defaultValue={state?.isEdit ? state?.data?.name : ''}
 						placeholder="Ex: Complete MERN Assignment"
 						onChange={(e) => {
 							validator('name', e.target.value, setTaskData);
@@ -97,6 +119,7 @@ const CreateTasks = () => {
 				</Row>
 				<Row>
 					<Input.TextArea
+						defaultValue={state?.isEdit ? state?.data?.description : ''}
 						rows={4}
 						style={{ width: '100%' }}
 						placeholder="Ex: Task Assigned To Assess MERN Skills"
@@ -167,6 +190,18 @@ const CreateTasks = () => {
 						) : null}
 					</Col>
 				</Row>
+				{state?.isEdit ? (
+					<Row>
+						<input
+							type="checkbox"
+							defaultChecked={taskData?.data?.isComplete}
+							onChange={(e) =>
+								validator('isComplete', e.target.checked, setTaskData)
+							}
+						/>{' '}
+						Completed
+					</Row>
+				) : null}
 			</div>
 		</Modal>
 	);

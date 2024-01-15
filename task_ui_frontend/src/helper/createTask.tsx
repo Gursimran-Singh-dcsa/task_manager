@@ -1,5 +1,7 @@
+import { postAxios, putAxios } from '../services/HttpService';
+
 export const validator = (
-	type: 'name' | 'description' | 'dueDate' | 'priority',
+	type: 'name' | 'description' | 'dueDate' | 'priority' | 'isComplete',
 	value: any,
 	setTaskData: Function
 ) => {
@@ -41,6 +43,9 @@ export const validator = (
 			error = 'Please Choose Priority';
 		}
 	}
+	if (type === 'isComplete') {
+		valueToSet = value;
+	}
 	if (error) {
 		setTaskData((prev: any) => ({
 			...prev,
@@ -69,4 +74,19 @@ export const isValidData = (taskData: any) => {
 		!errors.dueDate &&
 		!errors.priority;
 	return isValid;
+};
+
+export const createTask = async (data: any, isEdit: boolean) => {
+	if (isEdit) {
+		const idToDelete = data._id;
+		const dataToSend = {
+			name: data.name,
+			description: data.description,
+			isComplete: data.isComplete,
+			priority: data.priority,
+			dueDate: data.dueDate,
+		};
+		return putAxios(`/task/updateTask/${idToDelete}`, { ...dataToSend });
+	}
+	return postAxios('/task/create', { ...data });
 };

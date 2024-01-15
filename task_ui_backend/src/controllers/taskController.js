@@ -29,13 +29,46 @@ export const getTask = async (req, res, next) => {
       page: pageNumber,
       limit: pageSize,
       customLabels: { docs: 'taskList' },
-      sort: { createdAt: -1 }
+      sort: { dueDate: 1 }
     });
     const httpResponse = new ResponseService(STATUS.CREATED, { data }, 'SuccessFully fetched tasks');
     return res.json(httpResponse);
   } catch (err) {
     console.log('err', err);
     const HttpError = new HttpErrorService(STATUS.INTERNAL_SERVER_ERROR, 'failed getting Tasks', { err });
+    return next(HttpError);
+  }
+};
+
+export const deleteTask = async (req, res, next) => {
+  try {
+    const data = await TaskModel.deleteMany({
+      _id: req.body.ids
+    });
+    const httpResponse = new ResponseService(STATUS.DELETED, {}, 'SuccessFully Deleted Tasks');
+    return res.json(httpResponse);
+  } catch (err) {
+    console.log(err);
+    const HttpError = new HttpErrorService(STATUS.INTERNAL_SERVER_ERROR, 'failed Deleting Tasks', err);
+    return next(HttpError);
+  }
+};
+
+export const updateTask = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const data = await TaskModel.findOneAndUpdate({ _id: id }, {
+      isComplete: req.body.isComplete,
+      dueDate: req.body.dueDate,
+      name: req.body.name,
+      description: req.body.description,
+      priority: req.body.priority
+    });
+    const httpResponse = new ResponseService(STATUS.HTTP_OK, { data }, 'SuccessFully Updated Task');
+    return res.json(httpResponse);
+  } catch (err) {
+    console.log(err);
+    const HttpError = new HttpErrorService(STATUS.INTERNAL_SERVER_ERROR, 'failed Updating Task', err);
     return next(HttpError);
   }
 };
