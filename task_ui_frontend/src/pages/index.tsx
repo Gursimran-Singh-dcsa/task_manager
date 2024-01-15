@@ -1,7 +1,6 @@
 import { Layout } from 'antd';
 import { Outlet } from 'react-router';
 import { LogoText, StyledHeader } from '../styles/styledHeader';
-
 const { Content } = Layout;
 export const Homepage = () => {
 	return (

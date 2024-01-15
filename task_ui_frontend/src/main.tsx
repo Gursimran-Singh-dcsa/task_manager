@@ -6,6 +6,8 @@ import Homepage from './pages';
 import CreateTasks from './pages/createTasks';
 import LoginScreen from './pages/Login';
 import TaskList from './pages/TaskList';
+import { interceptor } from './services/interceptor';
+declare const window: any;
 
 const router = createBrowserRouter([
 	{
@@ -29,6 +31,8 @@ const router = createBrowserRouter([
 		element: <LoginScreen />,
 	},
 ]);
+window.intercepted ? null : interceptor();
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
 		<RouterProvider router={router} />

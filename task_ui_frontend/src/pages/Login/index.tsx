@@ -1,9 +1,18 @@
 import { Row, Col, Card, Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-
+import { postAxios } from '../../services/HttpService';
+import { useNavigate } from 'react-router';
+declare const window: any;
 const LoginForm = () => {
-	const onFinish = (values: any) => {
-		console.log('Received values:', values);
+	const navigate = useNavigate();
+	const onFinish = async (values: any, navigate: any) => {
+		postAxios('/user/login', { ...values }).then((res: any) => {
+			if (!res.isError) {
+				window.localStorage.setItem('token', res?.data?.token);
+				window.localStorage.setItem('userName', res?.data?.userName);
+				navigate('/task-list');
+			}
+		});
 		// Handle login logic here
 	};
 
@@ -14,7 +23,7 @@ const LoginForm = () => {
 				initialValues={{
 					remember: true,
 				}}
-				onFinish={onFinish}
+				onFinish={(values) => onFinish(values, navigate)}
 				layout="vertical"
 				requiredMark={false}
 			>
@@ -24,7 +33,8 @@ const LoginForm = () => {
 					rules={[
 						{
 							required: true,
-							message: 'Please enter your email!',
+							type: 'email',
+							message: 'Please enter valid email!',
 						},
 					]}
 				>

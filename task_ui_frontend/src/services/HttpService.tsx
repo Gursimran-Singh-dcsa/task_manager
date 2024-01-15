@@ -20,7 +20,7 @@ interface ApiResponse<T> {
 	errorMessage?: string;
 }
 
-const token = localStorage.getItem('token');
+const token = `Bearer ${localStorage.getItem('token')}`;
 
 export function getAxios<T>(
 	url: string,
