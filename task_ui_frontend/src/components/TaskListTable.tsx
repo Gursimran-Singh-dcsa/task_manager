@@ -155,6 +155,9 @@ const TaskListTable = ({ filters }: any) => {
 									.catch(() => {
 										'failed deleting tasks, please try again';
 									})
+									.finally(() => {
+										setSelectedRows([]);
+									})
 							}
 						>
 							Delete Selected
