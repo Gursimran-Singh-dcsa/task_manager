@@ -9,7 +9,6 @@ const app = express();
 
 dotenv.config();
 app.use(express.json());
-console.log('process.env.ALLOWED_HOSTS.split(",")', process.env.ALLOWED_HOSTS.split(","));
 app.use(
   cors({
     origin: process.env.ALLOWED_HOSTS.split(",").map((host) => host.trim()),

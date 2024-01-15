@@ -1,7 +1,7 @@
-import { Model } from "mongoose";
-import { COLLECTION_NAMES } from "../constants";
-import { UserSchema } from "../schema/users";
+import { model } from "mongoose";
+import { COLLECTION_NAMES } from "../constants.js";
+import { UserSchema } from "../schema/users.js";
 
-const UsersModel = new Model(COLLECTION_NAMES.USERS_COLLECTION, UserSchema);
+export const UserModel = new model(COLLECTION_NAMES.USERS_COLLECTION, UserSchema);
 
 export default UserSchema
