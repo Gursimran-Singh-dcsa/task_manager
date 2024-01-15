@@ -16,7 +16,7 @@ const data = {
 };
 const Analytics = () => {
 	return (
-		<Row style={{ padding: '12px 20px', background: WHITE, height: '350px' }}>
+		<Row style={{ padding: '12px 20px', background: WHITE, minHeight: '350px' }}>
 			<Col
 				xs={24}
 				sm={8}

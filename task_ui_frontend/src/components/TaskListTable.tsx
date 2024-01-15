@@ -23,11 +23,13 @@ export const getTaskColumns = (mutate: Function, navigate: Function) => [
 		title: 'Name',
 		dataIndex: 'name',
 		key: 'name',
+		width: 100
 	},
 	{
 		title: 'Description',
 		dataIndex: 'description',
 		key: 'description',
+		width: 300
 	},
 	{
 		title: 'Priority',
@@ -38,11 +40,13 @@ export const getTaskColumns = (mutate: Function, navigate: Function) => [
 				(item: any) => item.key.toLowerCase() === val.toLowerCase()
 			)?.label;
 		},
+		width: 80
 	},
 	{
 		title: 'Is Complete',
 		dataIndex: 'isComplete',
 		key: 'isComplete',
+		width: 50,
 		render: (val: boolean) => {
 			if (val) return <span style={{ fontSize: '20px' }}>✅</span>;
 			else return <span style={{ fontSize: '20px' }}>❌</span>;
@@ -55,9 +59,11 @@ export const getTaskColumns = (mutate: Function, navigate: Function) => [
 		render: (val: string) => {
 			return <span>{dayjs(val).format(BACKEND_API_DATE_FORMAT)}</span>;
 		},
+		width: 100
 	},
 	{
 		title: 'Action',
+		width: 300,
 		render: (row: any) => {
 			return (
 				<Space>
@@ -166,6 +172,7 @@ const TaskListTable = ({ filters }: any) => {
 				) : null}
 			</Row>
 			<Table
+				style={{ overflowX: 'auto', minWidth: '800px' }}
 				dataSource={
 					error
 						? []
