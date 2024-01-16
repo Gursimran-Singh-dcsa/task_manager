@@ -1,6 +1,6 @@
 import express from 'express';
 import { STATUS } from '../../constants.js';
-import { createTask, deleteTask, getTask, updateTask } from '../../controllers/taskController.js';
+import { createTask, deleteTask, getPendingTaskByPriority, getTask, updateTask } from '../../controllers/taskController.js';
 import { validateToken } from '../../middlewares/auth.js';
 import validationMiddleWare from '../../middlewares/validator.js';
 import HttpErrorService from '../../services/HttpErrorService.js';
@@ -14,10 +14,13 @@ TaskRouter.use(async (req, res, next) => {
     const HttpError = new HttpErrorService(STATUS.UNAUTHORIZED, `token invalid or expired plese relogin`);
     return next(HttpError);
   }
-  next()
+
+  req.user_data = resp?.data;
+  next();
 });
 TaskRouter.post('/create', validationMiddleWare(createTaskValidation), createTask);
 TaskRouter.get('/getTask', getTask);
 TaskRouter.delete('/deleteTasks', validationMiddleWare(deleteTaskValidation), deleteTask);
 TaskRouter.put('/updateTask/:id', validationMiddleWare(createTaskValidation), updateTask);
+TaskRouter.get('/getPendingTaskByPriority', getPendingTaskByPriority);
 export default TaskRouter;

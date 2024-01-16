@@ -12,7 +12,7 @@ const TaskList = () => {
 	const [showFilters, setShowFilters] = useState(false);
 	const [filters, setFilters] = useState({});
 	const navigate = useNavigate();
-	
+
 	return (
 		<>
 			<SubHeader
@@ -33,7 +33,7 @@ const TaskList = () => {
 				}}
 			>
 				<div className="heading">
-					{getGreeting()}, {'Guri'}
+					{getGreeting()}, {window.localStorage.getItem('userName')}
 				</div>
 			</Row>
 			<Analytics />

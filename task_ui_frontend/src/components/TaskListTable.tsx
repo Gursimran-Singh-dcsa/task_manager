@@ -23,13 +23,13 @@ export const getTaskColumns = (mutate: Function, navigate: Function) => [
 		title: 'Name',
 		dataIndex: 'name',
 		key: 'name',
-		width: 100
+		width: 100,
 	},
 	{
 		title: 'Description',
 		dataIndex: 'description',
 		key: 'description',
-		width: 300
+		width: 300,
 	},
 	{
 		title: 'Priority',
@@ -40,7 +40,7 @@ export const getTaskColumns = (mutate: Function, navigate: Function) => [
 				(item: any) => item.key.toLowerCase() === val.toLowerCase()
 			)?.label;
 		},
-		width: 80
+		width: 80,
 	},
 	{
 		title: 'Is Complete',
@@ -59,7 +59,7 @@ export const getTaskColumns = (mutate: Function, navigate: Function) => [
 		render: (val: string) => {
 			return <span>{dayjs(val).format(BACKEND_API_DATE_FORMAT)}</span>;
 		},
-		width: 100
+		width: 100,
 	},
 	{
 		title: 'Action',
@@ -135,6 +135,7 @@ const TaskListTable = ({ filters }: any) => {
 	useEffect(() => {
 		if (state?.mutate) {
 			mutate('/task/getTask');
+			mutate('/task/getPendingTaskByPriority');
 		}
 	}, [state]);
 

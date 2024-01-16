@@ -5,9 +5,9 @@ import dotenv from 'dotenv';
 export const generateToken = async (userDetails) => {
   try {
     dotenv.config();
-    const { userName, email } = userDetails;
+    const { userName, email, _id } = userDetails;
     const accessToken = jwt.sign(
-      { userName, email },
+      { userName, email, id: _id },
       process.env.SECRET_KEY,
       { expiresIn: "300000" }
     );

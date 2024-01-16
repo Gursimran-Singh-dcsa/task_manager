@@ -89,7 +89,6 @@ const CreateTasks = () => {
 										},
 										state?.isEdit
 									).finally(async () => {
-										// await mutate('/task/getTask')
 										navigate('/task-list', {
 											state: {
 												mutate: true,

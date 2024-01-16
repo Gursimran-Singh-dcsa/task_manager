@@ -1,5 +1,16 @@
-import { Badge, Col, Progress, Row, Table, Tooltip } from 'antd';
+import {
+	Badge,
+	Col,
+	message,
+	Progress,
+	Row,
+	Skeleton,
+	Table,
+	Tooltip,
+} from 'antd';
 import React from 'react';
+import useSWR from 'swr';
+import { getAxios } from '../services/HttpService';
 import { BLACK_0_45, WHITE } from '../styles/constants';
 
 const data = {
@@ -14,9 +25,34 @@ const data = {
 	tasksCompletedToday: 5,
 	tasksToCompleteByTomorrow: 3,
 };
+
+const fetchAnalyticsByPriority = async () => {
+	try {
+		const data: any = await getAxios('/task/getPendingTaskByPriority');
+		const modifiedData: any = {};
+		let total = 0;
+		data?.data?.forEach((item: any) => {
+			total = total + item.count;
+			if (item._id === 'medium')
+				return (modifiedData.mediumPriority = item.count);
+			if (item._id === 'low') return (modifiedData.lowPriority = item.count);
+			if (item._id === 'high') return (modifiedData.highPriority = item.count);
+		});
+		modifiedData.totalTasksPending = total;
+		return modifiedData;
+	} catch (err) {
+		message.error('Failed getting Task List please retry');
+	}
+};
 const Analytics = () => {
+	const { data, isLoading, error } = useSWR(
+		'/task/getPendingTaskByPriority',
+		() => fetchAnalyticsByPriority()
+	);
 	return (
-		<Row style={{ padding: '12px 20px', background: WHITE, minHeight: '350px' }}>
+		<Row
+			style={{ padding: '12px 20px', background: WHITE, minHeight: '350px' }}
+		>
 			<Col
 				xs={24}
 				sm={8}
@@ -28,69 +64,86 @@ const Analytics = () => {
 					justifyContent: 'center',
 				}}
 			>
-				<Tooltip title="">
-					<Progress
-						percent={
-							((data.lowPriority + data.mediumPriority) * 100) /
-							data.totalTasksPending
-						}
-						success={{
-							percent: (data.lowPriority * 100) / data.totalTasksPending,
-						}}
-						trailColor="red"
-						strokeColor="orange"
-						// showInfo={false}
-						size={310}
-						format={() => (
-							<React.Fragment>
-								<Badge color="red" />{' '}
-								<span
-									style={{
-										color: 'red',
-										width: '4px',
-										height: '4px',
-										borderRadius: 50,
-										fontSize: '16px',
-									}}
-								>
-									High - {data.highPriority}
-								</span>
-								<br />
-								<Badge color="orange" />{' '}
-								<span
-									style={{
-										color: 'orange',
-										width: '4px',
-										height: '4px',
-										borderRadius: 50,
-										fontSize: '16px',
-									}}
-								>
-									Medium - {data.mediumPriority}
-								</span>
-								<br />
-								<Badge color="green" />{' '}
-								<span
-									style={{
-										color: 'green',
-										width: '4px',
-										height: '4px',
-										borderRadius: 50,
-										fontSize: '16px',
-									}}
-								>
-									Low - {data.lowPriority}
-								</span>
-							</React.Fragment>
-						)}
-						type="dashboard"
-					/>
-				</Tooltip>
-				<div style={{ color: BLACK_0_45 }}>
-					Total Pending Tasks: {data.totalTasksPending}
-				</div>
+				{isLoading || error ? (
+					<Skeleton />
+				) : (
+					<>
+						<Tooltip title="">
+							<Progress
+								// percent={100}
+								percent={
+									((data.lowPriority + data.highPriority) * 100) /
+									data.totalTasksPending
+								}
+								success={{
+									percent: (data.highPriority * 100) / data.totalTasksPending,
+									strokeColor: 'red',
+								}}
+								trailColor={
+									data.totalTasksPending === 1
+										? data.lowPriority === 1
+											? 'green'
+											: data?.mediumPriority === 1
+											? 'orange'
+											: 'red'
+										: data?.mediumPriority === 0
+										? 'grey'
+										: 'orange'
+								}
+								strokeColor="green"
+								size={310}
+								format={() => (
+									<React.Fragment>
+										<Badge color="red" />{' '}
+										<span
+											style={{
+												color: 'red',
+												width: '4px',
+												height: '4px',
+												borderRadius: 50,
+												fontSize: '16px',
+											}}
+										>
+											High - {data.highPriority}
+										</span>
+										<br />
+										<Badge color="orange" />{' '}
+										<span
+											style={{
+												color: 'orange',
+												width: '4px',
+												height: '4px',
+												borderRadius: 50,
+												fontSize: '16px',
+											}}
+										>
+											Medium - {data.mediumPriority}
+										</span>
+										<br />
+										<Badge color="green" />{' '}
+										<span
+											style={{
+												color: 'green',
+												width: '4px',
+												height: '4px',
+												borderRadius: 50,
+												fontSize: '16px',
+											}}
+										>
+											Low - {data.lowPriority}
+										</span>
+									</React.Fragment>
+								)}
+								type="dashboard"
+							/>
+						</Tooltip>
+						<div style={{ color: BLACK_0_45 }}>
+							Total Pending Tasks: {data.totalTasksPending}
+						</div>
+					</>
+				)}
 			</Col>
-			<Col
+			{/* <Col
 				xs={24}
 				sm={8}
 				style={{
@@ -163,7 +216,7 @@ const Analytics = () => {
 					pagination={false}
 				/>
 				<div style={{ color: BLACK_0_45 }}>Tasks Summary</div>
-			</Col>
+			</Col> */}
 		</Row>
 	);
 };
