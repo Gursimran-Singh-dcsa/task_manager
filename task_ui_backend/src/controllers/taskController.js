@@ -15,7 +15,6 @@ export const createTask = async (req, res, next) => {
     const httpResponse = new ResponseService(STATUS.CREATED, { data }, 'SuccessFully created new Task');
     return res.json(httpResponse);
   } catch (err) {
-    console.log(err);
     const HttpError = new HttpErrorService(STATUS.INTERNAL_SERVER_ERROR, 'failed Creating New Task', err);
     return next(HttpError);
   }
@@ -42,7 +41,6 @@ export const getTask = async (req, res, next) => {
     const httpResponse = new ResponseService(STATUS.CREATED, { data }, 'SuccessFully fetched tasks');
     return res.json(httpResponse);
   } catch (err) {
-    console.log('err', err);
     const HttpError = new HttpErrorService(STATUS.INTERNAL_SERVER_ERROR, 'failed getting Tasks', { err });
     return next(HttpError);
   }
@@ -56,7 +54,6 @@ export const deleteTask = async (req, res, next) => {
     const httpResponse = new ResponseService(STATUS.DELETED, {}, 'SuccessFully Deleted Tasks');
     return res.json(httpResponse);
   } catch (err) {
-    console.log(err);
     const HttpError = new HttpErrorService(STATUS.INTERNAL_SERVER_ERROR, 'failed Deleting Tasks', err);
     return next(HttpError);
   }
@@ -108,7 +105,6 @@ export const getTotalAndPendingTasks = async (req, res, next) => {
     const httpResponse = new ResponseService(STATUS.HTTP_OK, { data: {totalTasks, pendingTasks} }, 'SuccessFully fetched Pending tasks by priority');
     return res.json(httpResponse);
   } catch (err) {
-    console.log('err', err)
     const HttpError = new HttpErrorService(STATUS.INTERNAL_SERVER_ERROR, 'failed getting Pending and Total Tasks', err);
     return next(HttpError);
   }

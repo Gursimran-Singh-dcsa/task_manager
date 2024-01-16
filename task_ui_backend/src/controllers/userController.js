@@ -52,7 +52,6 @@ export const loginUser = async (req, res, next) => {
       return next(HttpError);
     }
   } catch (err) {
-    console.log(err);
     const HttpError = new HttpErrorService(STATUS.INTERNAL_SERVER_ERROR, 'Internal server error', err);
     return next(HttpError);
   }

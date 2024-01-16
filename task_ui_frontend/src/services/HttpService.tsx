@@ -20,8 +20,6 @@ interface ApiResponse<T> {
 	errorMessage?: string;
 }
 
-const token = `Bearer ${localStorage.getItem('token')}`;
-
 export function getAxios<T>(
 	url: string,
 	headers?: Record<string, string>
@@ -56,6 +54,7 @@ async function axiosRequest<T>(
 	url: string,
 	options: RequestOptions
 ): Promise<ApiResponse<T>> {
+	const token = `Bearer ${localStorage.getItem('token')}`;
 	try {
 		const res = await axios({
 			url: `${BASE_URL}${url}`,

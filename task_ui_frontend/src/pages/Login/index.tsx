@@ -6,14 +6,16 @@ declare const window: any;
 const LoginForm = () => {
 	const navigate = useNavigate();
 	const onFinish = async (values: any, navigate: any) => {
-		postAxios('/user/login', { ...values }).then((res: any) => {
-			if (!res.isError) {
-				window.localStorage.setItem('token', res?.data?.token);
-				window.localStorage.setItem('userName', res?.data?.userName);
+		postAxios('/user/login', { ...values })
+			.then((res: any) => {
+				if (!res.isError) {
+					window.localStorage.setItem('token', res?.data?.token);
+					window.localStorage.setItem('userName', res?.data?.userName);
+				}
+			})
+			.finally(() => {
 				navigate('/task-list');
-			}
-		});
-		// Handle login logic here
+			});
 	};
 
 	return (

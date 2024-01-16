@@ -36,7 +36,6 @@ const FilterSection = ({
 					placeholder="Priority"
 					options={priorityMenuItems}
 					onChange={(value) => {
-						console.log('value is', value);
 						setFilters((prev: any) => ({ ...prev, priority: value?.toLowerCase() }));
 					}}
 				/>
