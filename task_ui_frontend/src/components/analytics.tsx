@@ -1,30 +1,9 @@
-import {
-	Badge,
-	Col,
-	message,
-	Progress,
-	Row,
-	Skeleton,
-	Table,
-	Tooltip,
-} from 'antd';
+import { Badge, Col, message, Progress, Row, Skeleton, Tooltip } from 'antd';
 import React from 'react';
 import useSWR from 'swr';
 import { getAxios } from '../services/HttpService';
 import { BLACK_0_45, WHITE } from '../styles/constants';
-
-const data = {
-	totalTasksPending: 10,
-	lowPriority: 3,
-	highPriority: 5,
-	mediumPriority: 2,
-	totalTasksTillToday: 30,
-	totalTasksCompletedOnTimeTillToday: 25,
-	totalTaksCompletedAfterDeadline: 18,
-	tasksCompletedYesterday: 3,
-	tasksCompletedToday: 5,
-	tasksToCompleteByTomorrow: 3,
-};
+import PendingAndTotalTasks from './pendingAndTotalTasks';
 
 const fetchAnalyticsByPriority = async () => {
 	try {
@@ -49,13 +28,14 @@ const Analytics = () => {
 		'/task/getPendingTaskByPriority',
 		() => fetchAnalyticsByPriority()
 	);
+	console.log('data is', data)
 	return (
 		<Row
 			style={{ padding: '12px 20px', background: WHITE, minHeight: '350px' }}
 		>
 			<Col
 				xs={24}
-				sm={8}
+				sm={12}
 				style={{
 					background: WHITE,
 					display: 'flex',
@@ -70,7 +50,6 @@ const Analytics = () => {
 					<>
 						<Tooltip title="">
 							<Progress
-								// percent={100}
 								percent={
 									((data.lowPriority + data.highPriority) * 100) /
 									data.totalTasksPending
@@ -143,80 +122,8 @@ const Analytics = () => {
 					</>
 				)}
 			</Col>
-			{/* <Col
-				xs={24}
-				sm={8}
-				style={{
-					background: WHITE,
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					justifyContent: 'center',
-				}}
-			>
-				{data.totalTasksCompletedOnTimeTillToday / data.totalTasksTillToday <
-				0.5 ? (
-					<div style={{ fontSize: '15rem', maxHeight: '300px' }}>😥</div>
-				) : (
-					<div style={{ fontSize: '15rem', maxHeight: '300px' }}>😀</div>
-				)}
-				<div style={{ color: BLACK_0_45 }}>
-					On Time Completion Rate is:{' '}
-					{(
-						(data.totalTasksCompletedOnTimeTillToday /
-							data.totalTasksTillToday) *
-						100
-					).toFixed(2) + '%'}
-				</div>
-			</Col>
-			<Col
-				xs={24}
-				sm={8}
-				style={{
-					background: WHITE,
-					display: 'flex',
-					justifyContent: 'space-around',
-					alignItems: 'center',
-					flexDirection: 'column',
-				}}
-			>
-				<Table
-					columns={[
-						{
-							title: '',
-							dataIndex: 'type',
-							key: 'type',
-						},
-						{
-							title: '',
-							dataIndex: 'value',
-							key: 'count',
-						},
-					]}
-					dataSource={[
-						{
-							type: 'Completed Yesterday',
-							value: data.tasksCompletedYesterday,
-						},
-
-						{
-							type: 'Completed Today',
-							value: data.tasksCompletedToday,
-						},
-						{
-							type: 'Pending for Today',
-							value: data.tasksCompletedToday,
-						},
-						{
-							type: 'To Complete By tomorrow',
-							value: data.tasksToCompleteByTomorrow,
-						},
-					]}
-					showHeader={false}
-					pagination={false}
-				/>
-				<div style={{ color: BLACK_0_45 }}>Tasks Summary</div>
-			</Col> */}
+			<PendingAndTotalTasks />
+			
 		</Row>
 	);
 };

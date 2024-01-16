@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -7,6 +6,7 @@ import CreateTasks from './pages/createTasks';
 import LoginScreen from './pages/Login';
 import TaskList from './pages/TaskList';
 import { interceptor } from './services/interceptor';
+import { SWRConfig } from 'swr';
 declare const window: any;
 
 const router = createBrowserRouter([
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
 				children: [
 					{
 						path: 'create-tasks',
-						element:  <CreateTasks />,
+						element: <CreateTasks />,
 					},
 				],
 			},
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
 window.intercepted ? null : interceptor();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-	<React.StrictMode>
+	<SWRConfig value={{ provider: () => new Map() }}>
 		<RouterProvider router={router} />
-	</React.StrictMode>
+	</SWRConfig>
 );

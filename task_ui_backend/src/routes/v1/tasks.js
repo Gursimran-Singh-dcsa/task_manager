@@ -1,6 +1,6 @@
 import express from 'express';
 import { STATUS } from '../../constants.js';
-import { createTask, deleteTask, getPendingTaskByPriority, getTask, updateTask } from '../../controllers/taskController.js';
+import { createTask, deleteTask, getPendingTaskByPriority, getTask, getTotalAndPendingTasks, updateTask } from '../../controllers/taskController.js';
 import { validateToken } from '../../middlewares/auth.js';
 import validationMiddleWare from '../../middlewares/validator.js';
 import HttpErrorService from '../../services/HttpErrorService.js';
@@ -23,4 +23,5 @@ TaskRouter.get('/getTask', getTask);
 TaskRouter.delete('/deleteTasks', validationMiddleWare(deleteTaskValidation), deleteTask);
 TaskRouter.put('/updateTask/:id', validationMiddleWare(createTaskValidation), updateTask);
 TaskRouter.get('/getPendingTaskByPriority', getPendingTaskByPriority);
+TaskRouter.get('/getTotalAndPendingTasks', getTotalAndPendingTasks);
 export default TaskRouter;

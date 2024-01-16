@@ -88,7 +88,7 @@ export const getPendingTaskByPriority = async (req, res, next) => {
       , {
         $group: {
           // _id: { priority: '$priority' },
-          _id: '$priority' ,
+          _id: '$priority',
           count: { $sum: 1 }
         }
       }]);
@@ -96,6 +96,20 @@ export const getPendingTaskByPriority = async (req, res, next) => {
     return res.json(httpResponse);
   } catch (err) {
     const HttpError = new HttpErrorService(STATUS.INTERNAL_SERVER_ERROR, 'failed getting Pending tasks by priority', err);
+    return next(HttpError);
+  }
+};
+
+export const getTotalAndPendingTasks = async (req, res, next) => {
+  try {
+    const userData = req.user_data;
+    const pendingTasks = await  TaskModel.countDocuments({ user: userData.id, isComplete: false });
+    const totalTasks = await TaskModel.countDocuments({ user: userData.id });
+    const httpResponse = new ResponseService(STATUS.HTTP_OK, { data: {totalTasks, pendingTasks} }, 'SuccessFully fetched Pending tasks by priority');
+    return res.json(httpResponse);
+  } catch (err) {
+    console.log('err', err)
+    const HttpError = new HttpErrorService(STATUS.INTERNAL_SERVER_ERROR, 'failed getting Pending and Total Tasks', err);
     return next(HttpError);
   }
 };
