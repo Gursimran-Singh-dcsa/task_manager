@@ -7,7 +7,6 @@ import LoginScreen from './pages/Login';
 import TaskList from './pages/TaskList';
 import { interceptor } from './services/interceptor';
 import { SWRConfig } from 'swr';
-import { useContext } from 'react';
 declare const window: any;
 
 const router = createBrowserRouter([
