@@ -106,6 +106,7 @@ export const getTaskColumns = (mutate: Function, navigate: Function) => [
 								createTask({ ...row, isComplete: true }, true).then((res) => {
 									if (!res.isError) message.success('Task Marked as done');
 									mutate('/task/getTask');
+									mutate('/task/getPendingTaskByPriority')
 								});
 							}}
 						>

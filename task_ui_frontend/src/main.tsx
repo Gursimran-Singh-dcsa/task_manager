@@ -7,6 +7,7 @@ import LoginScreen from './pages/Login';
 import TaskList from './pages/TaskList';
 import { interceptor } from './services/interceptor';
 import { SWRConfig } from 'swr';
+import { useContext } from 'react';
 declare const window: any;
 
 const router = createBrowserRouter([
@@ -33,8 +34,11 @@ const router = createBrowserRouter([
 ]);
 window.intercepted ? null : interceptor();
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-	<SWRConfig value={{ provider: () => new Map() }}>
-		<RouterProvider router={router} />
-	</SWRConfig>
-);
+const App = () => {
+	return (
+		<SWRConfig value={{ provider: () => new Map() }}>
+			<RouterProvider router={router} />
+		</SWRConfig>
+	);
+};
+ReactDOM.createRoot(document.getElementById('root')!).render(<App />);
